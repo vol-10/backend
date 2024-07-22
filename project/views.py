@@ -28,4 +28,5 @@ def picture(filename):
 @bp.route('/bgm',methods=['GET'])
 def bgm():
     # BGMの生成ロジックをimportし記載
-    return jsonify({'bgm'}),201
+    bgm = "bgm.mp4"
+    return jsonify({'bgm': bgm}),201
