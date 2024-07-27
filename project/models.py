@@ -1,5 +1,6 @@
 from audiocraft.models import musicgen
 from audiocraft.data.audio import audio_write
+from pydub import AudioSegment
 
 sounds_path = './static/sounds/'
 
@@ -11,7 +12,7 @@ def create_bgm(emo_str, out_name, out_dur):
     out_dur:  音声の長さ[秒]    ex: 6.0
 
     戻り値（仮）
-    音声ファイルのパス
+    音声ファイルの名前
     '''
     #モデルの選択
     model = musicgen.MusicGen.get_pretrained('facebook/musicgen-small')
@@ -28,5 +29,7 @@ def create_bgm(emo_str, out_name, out_dur):
     #保存
     audio_write(sounds_path + out_name,
                 output[0].cpu(), model.sample_rate)
+    notes = AudioSegment.from_wav(sounds_path + out_name + '.wav')
+    notes.export(sounds_path + out_name + '.mp3', format="mp3")
     
-    return sounds_path + out_name
+    return out_name + '.mp3'

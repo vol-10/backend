@@ -44,7 +44,5 @@ def classify(filename):
 # BGM表示ルート
 @bp.route('/bgm/<emotion>',methods=['GET'])
 def bgm(emotion):
-    # BGMの生成ロジックをimportし記載
-    #bgm = "bgm.mp4"
-    bgm = create_bgm(emotion, 'bgm', 6.0)    #現状、wavファイル"bgm.wav"
+    bgm = create_bgm(emotion, 'bgm', 6.0)    # bgm = 'filename.mp3'
     return jsonify({'bgm': bgm}),201
