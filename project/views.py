@@ -2,6 +2,7 @@ from flask import request, jsonify, Blueprint, current_app, send_from_directory
 import os
 from werkzeug.utils import secure_filename
 from project.image import classify_image
+from models import create_bgm
 
 # BluePrint設定
 bp = Blueprint('main', __name__)
@@ -41,8 +42,9 @@ def classify(filename):
 
 
 # BGM表示ルート
-@bp.route('/bgm',methods=['GET'])
-def bgm():
+@bp.route('/bgm/<emotion>',methods=['GET'])
+def bgm(emotion):
     # BGMの生成ロジックをimportし記載
-    bgm = "bgm.mp4"
+    #bgm = "bgm.mp4"
+    bgm = create_bgm(emotion, 'bgm', 6.0)    #現状、wavファイル"bgm.wav"
     return jsonify({'bgm': bgm}),201
