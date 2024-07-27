@@ -1,8 +1,7 @@
 from audiocraft.models import musicgen
 from audiocraft.data.audio import audio_write
 from pydub import AudioSegment
-
-sounds_path = './static/sounds/'
+from flask import current_app
 
 def create_bgm(emo_str, out_name, out_dur):
     '''
@@ -27,6 +26,7 @@ def create_bgm(emo_str, out_name, out_dur):
         progress = True
     )
     #保存
+    sounds_path = current_app.config['UPLOAD_SOUNDS']
     audio_write(sounds_path + out_name,
                 output[0].cpu(), model.sample_rate)
     notes = AudioSegment.from_wav(sounds_path + out_name + '.wav')

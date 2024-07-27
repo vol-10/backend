@@ -28,4 +28,4 @@ def classify_image(img_path):
 
 
     # Print the predicted class
-    return class_names[predicted_class_index[0]]
+    return class_names[predicted_class_index]
