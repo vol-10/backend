@@ -1,28 +1,44 @@
 from flask import request, jsonify, Blueprint, current_app, send_from_directory
 import os
 from werkzeug.utils import secure_filename
+from project.image import classify_image
 
 # BluePrint設定
 bp = Blueprint('main', __name__)
 
 
-# 画像投稿ルート
+
 @bp.route('/images', methods=['POST'])
 def post_image():
-    images = request.files['picture']
+    if 'picture' not in request.files:
+        print("No file part in the request")
+        return jsonify({'error': 'No file part'}), 400
     
-    picture = secure_filename(images.filename)
-    images.save(os.path.join(current_app.config['UPLOAD_FOLDER'],picture))
+    file = request.files['picture']
     
-    return jsonify({
-        'picture': images,
-    }),201
+    if file.filename == '':
+        print("No selected file")
+        return jsonify({'error': 'No selected file'}), 400
+    
+    try:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+        return jsonify({'message': 'File successfully uploaded', 'filename': filename}), 201
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to upload file'}), 500
 
 
-# 画像表示ルート
-@bp.route('/picture/<filename>',methods=['GET'])
-def picture(filename):
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'],filename)
+
+@bp.route('/classify/<filename>', methods=['GET'])
+def classify(filename):
+    file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+    if not os.path.exists(file_path):
+        return jsonify({'error': 'File not found'}), 404
+    
+    emotion = classify_image(file_path)
+    return jsonify({'emotion': emotion})
+
 
 # BGM表示ルート
 @bp.route('/bgm',methods=['GET'])
