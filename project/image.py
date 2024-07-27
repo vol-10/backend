@@ -1,6 +1,5 @@
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
 import numpy as np
 
 # モデルのロード 
@@ -29,4 +28,4 @@ def classify_image(img_path):
 
 
     # Print the predicted class
-    return class_names[predicted_class_index]
+    return class_names[predicted_class_index[0]]
