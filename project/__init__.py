@@ -17,6 +17,7 @@ def create_app(config_filename='config.py'):
     
     # 画像パス設定
     app.config["UPLOAD_FOLDER"] = os.path.join(os.getcwd(),'project/static/images/')
+    app.config['UPLOAD_SOUNDS'] = os.path.join(os.getcwd(),'project/static/sounds/')
     # blueprint設定
     from project.views import bp as main_bp
     app.register_blueprint(main_bp)

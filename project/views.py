@@ -2,7 +2,7 @@ from flask import request, jsonify, Blueprint, current_app, send_from_directory
 import os
 from werkzeug.utils import secure_filename
 from project.image import classify_image
-from models import create_bgm
+from project.models import create_bgm
 
 # BluePrint設定
 bp = Blueprint('main', __name__)
@@ -41,8 +41,18 @@ def classify(filename):
     return jsonify({'emotion': emotion})
 
 
-# BGM表示ルート
+# BGM保存ルート
 @bp.route('/bgm/<emotion>',methods=['GET'])
 def bgm(emotion):
     bgm = create_bgm(emotion, 'bgm', 6.0)    # bgm = 'filename.mp3'
+    
     return jsonify({'bgm': bgm}),201
+
+# BGM表示ルート
+@bp.route('/sounds/<filename>', methods=['GET'])
+def get_sound(filename):
+    file_path = os.path.join(current_app.config['UPLOAD_SOUNDS'], filename)
+    if os.path.exists(file_path):
+        return send_from_directory(current_app.config['UPLOAD_SOUNDS'], filename)
+    else:
+        return jsonify({'error': 'File not found'}), 404
