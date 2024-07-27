@@ -7,7 +7,7 @@ import numpy as np
 model = tf.keras.models.load_model('image_model.h5')
 
 # テスト画像のパス
-img_path = 'project/static/images'
+img_path = 'project/static/images/'
 
 # 画像の読み込みと前処理
 img = image.load_img(img_path, target_size=(48, 48), color_mode='grayscale') # Change target_size to (48, 48) and convert to grayscale
